@@ -3,19 +3,28 @@ version: '3.8'
 services:
   app:
     build: .
+    container_name: crud-app
     ports:
       - "8080:8080"
     environment:
-      APP_NAME: CRUDApp
-      DB_URL: jdbc:postgresql://db:5432/crud_db
-      DB_USERNAME: crud_user
-      DB_PASSWORD: crud_password
-      HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      APP_NAME: ${APP_NAME}
+      DB_URL: jdbc:postgresql://${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      HIBERNATE_DIALECT: ${HIBERNATE_DIALECT}
     depends_on:
       - db
+    volumes:
+      - ./src:/app/src
+      - ./target:/app/target
+      - ./pom.xml:/app/pom.xml
+    networks:
+      - crud-network
+    command: ["mvn", "spring-boot:run"]
 
   db:
     image: postgres:13
+    container_name: crud-db
     ports:
       - "5432:5432"
     environment:
@@ -24,6 +33,12 @@ services:
       POSTGRES_PASSWORD: crud_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - crud-network
 
 volumes:
   postgres_data:
+
+networks:
+  crud-network:
+    driver: bridge

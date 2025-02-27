@@ -1,19 +1,35 @@
-# Utilise une image officielle de Maven avec OpenJDK 17
-FROM maven:3.8.5-openjdk-17 AS builder
+# Étape de construction
+FROM openjdk:17-jdk-slim as builder
 
-# Définit le répertoire de travail
+# Installer Maven dans l'étape de construction
+RUN apt-get update && \
+    apt-get install -y maven && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copie le fichier pom.xml et les fichiers de code source
+# Copier le pom.xml et les sources
 COPY pom.xml .
-COPY src ./src
+COPY src /app/src
 
-# Build l'application
-RUN mvn clean package -DskipTests
+# Construire le projet
+RUN mvn clean install -DskipTests
 
-# Utilise une image Java pour exécuter l'application
+# Étape d'exécution
 FROM openjdk:17-jdk-slim
-COPY --from=builder /app/target/crud-0.0.1-SNAPSHOT.jar crud-app.jar
 
-# Définit la commande par défaut pour exécuter l'application
-ENTRYPOINT ["java", "-jar", "/crud-app.jar"]
+# Installer Maven également dans l'étape d'exécution
+RUN apt-get update && \
+    apt-get install -y maven && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copier le pom.xml et les sources de l'étape de construction
+COPY --from=builder /app /app
+
+# Exposer le port
+EXPOSE 8080
+
+# Utiliser Maven pour démarrer l'application en mode développement avec hot reload
+CMD ["mvn", "spring-boot:run"]

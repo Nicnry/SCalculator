@@ -18,7 +18,8 @@ This project provides a CRUD facilitator based on Spring to simplify the creatio
    ```bash
    git clone https://github.com/Nicnry/JavaSpringCrud.git
    cd JavaSpringCrud
-2. Build and start the containers:
+2. Edit .env.example with correct informations (Docker database and app name)
+3. Build and start the containers:
    ```bash
    docker-compose up --build
-3. The project started on port 8080.
+4. The project started on port 8080.
