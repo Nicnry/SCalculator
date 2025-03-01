@@ -5,16 +5,11 @@ import com.crud.crud.entity.BaseEntity;
 import com.crud.crud.service.BaseServiceImpl;
 import com.crud.crud.mapper.BaseMapper;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public abstract class BaseController<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Serializable> {
 

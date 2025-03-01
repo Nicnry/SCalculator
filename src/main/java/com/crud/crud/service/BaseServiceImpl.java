@@ -5,13 +5,9 @@ import com.crud.crud.entity.BaseEntity;
 import com.crud.crud.mapper.BaseMapper;
 import com.crud.crud.repository.BaseRepository;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class BaseServiceImpl<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Serializable> implements BaseService<T, D, ID> {
 
