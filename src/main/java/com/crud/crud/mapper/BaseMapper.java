@@ -13,6 +13,9 @@ public abstract class BaseMapper<T extends BaseEntity<ID>, D extends BaseDTO<ID>
         }
         D dto = createDTO();
         dto.setId(entity.getId());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+        dto.setDeletedAt(entity.getDeletedAt());
         return dto;
     }
     

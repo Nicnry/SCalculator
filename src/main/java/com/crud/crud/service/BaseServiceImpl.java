@@ -39,6 +39,15 @@ public class BaseServiceImpl<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID
         return baseMapper.toDTO(savedEntity);
     }
 
+    public D partialUpdate(ID id, T entity) {
+        Optional<D> existingEntityOpt = this.findById(id);
+        if (existingEntityOpt.isPresent()) {
+            D existingEntity = existingEntityOpt.get();
+            return existingEntity;
+        }
+        return null;
+    }
+
     @Override
     public void deleteById(ID id) {
         repository.deleteById(id);

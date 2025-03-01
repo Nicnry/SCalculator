@@ -13,7 +13,13 @@ public class UserMapper extends BaseMapper<User, UserDTO, Long> {
         if (user == null) {
             return null;
         }
-        return new UserDTO(user.getName(), user.getEmail());
+        UserDTO dto = createDTO();
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setCreatedAt(user.getCreatedAt());
+        dto.setUpdatedAt(user.getUpdatedAt());
+        dto.setDeletedAt(user.getDeletedAt());
+        return dto;
     }
 
     @Override

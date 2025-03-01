@@ -5,6 +5,7 @@ import com.crud.crud.entity.BaseEntity;
 import com.crud.crud.service.BaseServiceImpl;
 import com.crud.crud.mapper.BaseMapper;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +27,10 @@ public abstract class BaseController<T extends BaseEntity<ID>, D extends BaseDTO
         return service.findAll();
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<D> findById(@PathVariable ID id) {
         return service.findById(id)
-                .map(ResponseEntity::ok)  // Pas besoin de convertir en DTO
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -49,6 +49,15 @@ public abstract class BaseController<T extends BaseEntity<ID>, D extends BaseDTO
                     return ResponseEntity.ok(updatedDto);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<D> partialUpdate(@PathVariable ID id, @RequestBody T entity) {
+        D updatedEntity = service.partialUpdate(id, entity);
+        if (updatedEntity != null) {
+            return new ResponseEntity<>(updatedEntity, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
