@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @MappedSuperclass
 public abstract class BaseEntity<T extends Serializable> implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private T id;

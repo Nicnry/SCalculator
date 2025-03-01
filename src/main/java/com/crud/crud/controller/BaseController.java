@@ -1,45 +1,57 @@
 package com.crud.crud.controller;
 
+import com.crud.crud.dto.BaseDTO;
 import com.crud.crud.entity.BaseEntity;
-import com.crud.crud.service.BaseService;
+import com.crud.crud.service.BaseServiceImpl;
+import com.crud.crud.mapper.BaseMapper;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serializable> {
-    
-    protected final BaseService<T, ID> service;
+public abstract class BaseController<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Serializable> {
 
-    public BaseController(BaseService<T, ID> service) {
+    protected final BaseServiceImpl<T, D, ID> service;
+    protected final BaseMapper<T, D, ID> baseMapper;
+
+    public BaseController(BaseServiceImpl<T, D, ID> service, BaseMapper<T, D, ID> baseMapper) {
         this.service = service;
+        this.baseMapper = baseMapper;
     }
 
     @GetMapping
-    public List<T> findAll() {
+    public List<D> findAll() {
         return service.findAll();
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<T> findById(@PathVariable ID id) {
+    public ResponseEntity<D> findById(@PathVariable ID id) {
         return service.findById(id)
-                .map(ResponseEntity::ok)
+                .map(ResponseEntity::ok)  // Pas besoin de convertir en DTO
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<T> save(@RequestBody T entity) {
-        T savedEntity = service.save(entity).orElse(null);
-        return ResponseEntity.ok(savedEntity);
+    public ResponseEntity<D> save(@RequestBody T entity) {
+        D savedDto = service.save(entity);
+        return ResponseEntity.ok(savedDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<T> update(@PathVariable ID id, @RequestBody T entity) {
+    public ResponseEntity<D> update(@PathVariable ID id, @RequestBody T entity) {
         return service.findById(id)
                 .map(existingEntity -> {
                     entity.setId(id);
-                    return ResponseEntity.ok(service.save(entity).orElse(null));
+                    D updatedDto = service.save(entity);
+                    return ResponseEntity.ok(updatedDto);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

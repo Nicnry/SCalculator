@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: crud-app
+    container_name: scalculator-app
     ports:
       - "8080:8080"
     environment:
@@ -19,12 +19,12 @@ services:
       - ./target:/app/target
       - ./pom.xml:/app/pom.xml
     networks:
-      - crud-network
+      - scalculator-network
     command: ["mvn", "spring-boot:run"]
 
   db:
     image: postgres:13
-    container_name: crud-db
+    container_name: scalculator-db
     ports:
       - "5432:5432"
     environment:
@@ -34,11 +34,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - crud-network
+      - scalculator-network
 
 volumes:
   postgres_data:
 
 networks:
-  crud-network:
+  scalculator-network:
     driver: bridge
