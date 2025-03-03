@@ -28,9 +28,13 @@ public class BaseServiceImpl<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID
     }
 
     @Override
-    public Optional<D> findById(ID id) {
-        Optional<T> entity = repository.findById(id);
-        return entity.map(baseMapper::toDTO);
+    public Optional<D> findDTOById(ID id) {
+        return this.findById(id).map(baseMapper::toDTO);
+    }
+
+    @Override
+    public Optional<T> findById(ID id) {
+        return repository.findById(id);
     }
 
     @Override
@@ -40,10 +44,18 @@ public class BaseServiceImpl<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID
     }
 
     public D partialUpdate(ID id, T entity) {
-        Optional<D> existingEntityOpt = this.findById(id);
+        Optional<T> existingEntityOpt = repository.findById(id);
         if (existingEntityOpt.isPresent()) {
-            D existingEntity = existingEntityOpt.get();
-            return existingEntity;
+            T existingEntity = existingEntityOpt.get();
+            
+            if (entity.getDeletedAt() != null) {
+                existingEntity.setDeletedAt(entity.getDeletedAt());
+            }
+
+            T updatedEntity = repository.save(existingEntity);
+            System.out.println(updatedEntity.getId());
+            System.out.println("updatedEntity.getId()");
+            return baseMapper.toDTO(updatedEntity);
         }
         return null;
     }

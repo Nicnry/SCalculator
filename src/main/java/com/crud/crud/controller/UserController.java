@@ -5,7 +5,6 @@ import com.crud.crud.entity.User;
 import com.crud.crud.mapper.UserMapper;
 import com.crud.crud.service.UserService;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,12 +17,6 @@ public class UserController extends BaseController<User, UserDTO, Long> {
         super(userService, userMapper);
         this.userService = userService;
         this.userMapper = userMapper;
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDTO> save(@RequestBody User user) {
-        UserDTO savedUserDto = userService.save(user);
-        return ResponseEntity.ok(savedUserDto);
     }
 
 }

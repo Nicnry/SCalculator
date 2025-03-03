@@ -29,7 +29,7 @@ public abstract class BaseController<T extends BaseEntity<ID>, D extends BaseDTO
 
     @GetMapping("/{id}")
     public ResponseEntity<D> findById(@PathVariable ID id) {
-        return service.findById(id)
+        return service.findDTOById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

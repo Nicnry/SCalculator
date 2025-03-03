@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface BaseService<T extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Serializable> {
     List<D> findAll();
-    Optional<D> findById(ID id);
+    Optional<D> findDTOById(ID id);
+    Optional<T> findById(ID id);
     D save(T entity);
     void deleteById(ID id);
 }

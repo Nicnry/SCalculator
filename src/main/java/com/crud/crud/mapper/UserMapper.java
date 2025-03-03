@@ -14,6 +14,7 @@ public class UserMapper extends BaseMapper<User, UserDTO, Long> {
             return null;
         }
         UserDTO dto = createDTO();
+        dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setCreatedAt(user.getCreatedAt());
