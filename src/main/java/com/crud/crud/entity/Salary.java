@@ -2,6 +2,7 @@ package com.crud.crud.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "salaries")
@@ -60,7 +61,9 @@ public class Salary extends BaseEntity<Long> {
     }
 
     public BigDecimal getAvsAiApgContribution() {
-        return avsAiApgContribution;
+        return taxableSalary
+                .multiply(avsAiApgContribution)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
     public void setAvsAiApgContribution(BigDecimal avsAiApgContribution) {
@@ -68,7 +71,9 @@ public class Salary extends BaseEntity<Long> {
     }
 
     public BigDecimal getVdLpcfamDeduction() {
-        return vdLpcfamDeduction;
+        return taxableSalary
+                .multiply(vdLpcfamDeduction)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
     public void setVdLpcfamDeduction(BigDecimal vdLpcfamDeduction) {
@@ -76,7 +81,9 @@ public class Salary extends BaseEntity<Long> {
     }
 
     public BigDecimal getAcDeduction() {
-        return acDeduction;
+        return taxableSalary
+                .multiply(acDeduction)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
     public void setAcDeduction(BigDecimal acDeduction) {
@@ -84,7 +91,9 @@ public class Salary extends BaseEntity<Long> {
     }
 
     public BigDecimal getAanpDeduction() {
-        return aanpDeduction;
+        return taxableSalary
+                .multiply(aanpDeduction)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
     public void setAanpDeduction(BigDecimal aanpDeduction) {
@@ -92,7 +101,9 @@ public class Salary extends BaseEntity<Long> {
     }
 
     public BigDecimal getIjmA1Deduction() {
-        return ijmA1Deduction;
+        return taxableSalary
+                .multiply(ijmA1Deduction)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
     public void setIjmA1Deduction(BigDecimal ijmA1Deduction) {

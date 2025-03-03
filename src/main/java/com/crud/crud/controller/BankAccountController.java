@@ -55,4 +55,13 @@ public class BankAccountController {
         boolean deleted = bankAccountService.deleteBankAccountForUser(userId, bankAccountId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<Double> getTotalSalaries(@PathVariable Long userId) {
+        List<BankAccountDTO> bankAccounts = bankAccountService.findBankAccountByUserId(userId);
+        double totalBalance = bankAccounts.stream()
+                        .mapToDouble(BankAccountDTO::getBalance)
+                        .sum();
+        return ResponseEntity.ok(totalBalance);
+    }
 }

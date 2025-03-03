@@ -1,5 +1,6 @@
 package com.crud.crud.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,17 @@ public class SalaryService extends BaseServiceImpl<Salary, SalaryDTO, Long>  {
         return salaryRepository.findByIdAndUserId(id, userId)
                                .map(salaryMapper::toDTO)
                                .orElse(null);
+    }
+
+    public BigDecimal findNetSalaryByUserId(Long userId, Long id) {
+        Salary salary = salaryRepository.findByIdAndUserId(id, userId).orElse(null);
+        return salary.getTaxableSalary()
+                        .subtract(salary.getAvsAiApgContribution())
+                        .subtract(salary.getVdLpcfamDeduction())
+                        .subtract(salary.getAcDeduction())
+                        .subtract(salary.getAanpDeduction())
+                        .subtract(salary.getIjmA1Deduction())
+                        .subtract(salary.getLppDeduction());
     }
 
     public SalaryDTO partialUpdateSalaryForUser(Long userId, Long salaryId, Salary salary) {

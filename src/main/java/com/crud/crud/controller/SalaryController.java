@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -54,5 +55,11 @@ public class SalaryController {
     public ResponseEntity<Void> deleteSalary(@PathVariable Long userId, @PathVariable Long salaryId) {
         boolean deleted = salaryService.deleteSalaryForUser(userId, salaryId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/net")
+    public ResponseEntity<BigDecimal> getNetSalaryById(@PathVariable Long userId, @PathVariable Long id) {
+        BigDecimal salary = salaryService.findNetSalaryByUserId(userId, id);
+        return salary != null ? ResponseEntity.ok(salary) : ResponseEntity.notFound().build();
     }
 }
